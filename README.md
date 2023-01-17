@@ -22,3 +22,5 @@ https://gomakethings.com/how-to-play-a-sound-with-javascript/
 Please refer to repo.
 
 ## Screenshot
+
+![Screenshot](./starter/assets/Img/jscoding-quiz.png)
