@@ -10,7 +10,7 @@ var finalScore = document.querySelector("#final-score");
 var initialsInput = document.querySelector("#initials");
 var submitBtn = document.querySelector("#submit");
 
-var timer = 30;
+var time = 30;
 var currQuestion = 0;
 var score = 0;
 var correctAnswerSound = document.querySelector("#correct-answer");
@@ -49,15 +49,34 @@ var questionsArray = [
         answer: 'JavaScript file and in HTML document directly',
     }
 ]
-//to start quiz 
-startBtn.addEventListener("click", startQuiz);
 
-function startQuiz() {
-    startBtn.style.display = "none";
-    questionContainer.classList.remove("hide");
-    showQuestion();
-    startTimer();
+function startTimer() {
+    var interval = setInterval(function () {
+        time--;
+        if (time === 0) {
+            clearInterval(interval);
+            endQuiz();
+        }
+    }, 1000);
 }
+
+startBtn.addEventListener("click", function () {
+    questionContainer.classList.remove("hide");
+    startBtn.classList.add("hide");
+    var interval = setInterval(function () {
+        time--;
+        timer.textContent = time;
+        if (time === 0) {
+            clearInterval(interval);
+    
+        }
+    }, 1000);
+    showQuestion();
+
+    
+});
+
+
 //to show question
 function showQuestion() {
     var currentQuestion = questionsArray[currQuestion];
@@ -82,10 +101,10 @@ function checkAnswer(event) {
 
         feedback.classList.remove("hide");
     } else {
-        timer -= 10;
+        time -= 10;
         feedback.textContent = "Incorrect!";
         if (answer !== questionsArray[currQuestion].answer) {
-            wrongAnswerSound.play();
+                    wrongAnswerSound.play();
         }
 
         feedback.classList.remove("hide");
@@ -98,20 +117,14 @@ function checkAnswer(event) {
     }
 }
 // to time the quiz
-function startTimer() {
-    var interval = setInterval(function () {
-        timer--;
-        if (timer === 0) {
-            clearInterval(interval);
-            endQuiz();
-        }
-    }, 1000);
-}
+
 
 function endQuiz() {
     questionContainer.classList.add("hide");
     endScreen.classList.remove("hide");
     finalScore.textContent = score;
+    clearInterval(interval);
+    
 }
 submitBtn.addEventListener("click", function () {
     // Save the initials and score to local storage
@@ -121,5 +134,6 @@ submitBtn.addEventListener("click", function () {
     localStorage.setItem("highscores", JSON.stringify(highscores));
 })
 
-var highscores = localStorage.getItem("highscores");
-document.querySelector("#final-score").textContent = highscores;
+
+
+    
