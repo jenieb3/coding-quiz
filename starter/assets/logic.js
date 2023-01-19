@@ -16,7 +16,6 @@ var score = 0;
 var correctAnswerSound = document.querySelector("#correct-answer");
 var wrongAnswerSound = document.querySelector("#wrong-answer");
 
-
 var questionsArray = [
     {
         question: '1. JavaScript is the programming language of the _____.',
@@ -53,29 +52,13 @@ var questionsArray = [
 function startTimer() {
     var interval = setInterval(function () {
         time--;
-        if (time === 0) {
+        timer.textContent = time;
+        if (time < 0 || time == 0) {
             clearInterval(interval);
             endQuiz();
         }
     }, 1000);
 }
-
-startBtn.addEventListener("click", function () {
-    questionContainer.classList.remove("hide");
-    startBtn.classList.add("hide");
-    var interval = setInterval(function () {
-        time--;
-        timer.textContent = time;
-        if (time === 0) {
-            clearInterval(interval);
-    
-        }
-    }, 1000);
-    showQuestion();
-
-    
-});
-
 
 //to show question
 function showQuestion() {
@@ -104,7 +87,7 @@ function checkAnswer(event) {
         time -= 10;
         feedback.textContent = "Incorrect!";
         if (answer !== questionsArray[currQuestion].answer) {
-                    wrongAnswerSound.play();
+            wrongAnswerSound.play();
         }
 
         feedback.classList.remove("hide");
@@ -120,20 +103,33 @@ function checkAnswer(event) {
 
 
 function endQuiz() {
+    console.log('endQuiz function ran');
     questionContainer.classList.add("hide");
-    endScreen.classList.remove("hide");
     finalScore.textContent = score;
-    clearInterval(interval);
-    
+    endScreen.classList.remove("hide");
 }
+
+
 submitBtn.addEventListener("click", function () {
     // Save the initials and score to local storage
     var initials = initialsInput.value;
     var highscores = JSON.parse(localStorage.getItem("highscores")) || [];
     highscores.push({ initials: initials, score: score });
     localStorage.setItem("highscores", JSON.stringify(highscores));
+    document.location.href = 'index.html';
 })
 
+startBtn.addEventListener("click", function () {
+    questionContainer.classList.remove("hide");
+    startBtn.classList.add("hide");
+    // show the first question
+    showQuestion();
+    // star the timer
+    startTimer();
 
 
-    
+});
+
+
+
+
